@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io"
+	_ "io"
 	"net"
 	"os"
 )
@@ -44,8 +44,15 @@ func handleRequest(con *net.TCPConn) {
 		con.Close()
 		fmt.Println("con close")
 	}()
+	buffer := make([]byte, 1000)
 	for {
-		_, err := io.Copy(con, con)
+		//_, err := io.Copy(con, con)
+		_, err := con.Read(buffer)
+		if err != nil {
+			fmt.Println("copy error:", err)
+			break
+		}
+		_, err = con.Write(buffer)
 		if err != nil {
 			fmt.Println("copy error:", err)
 			break
