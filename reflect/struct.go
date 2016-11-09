@@ -18,6 +18,8 @@ func main() {
 	t := T{23, "skidoo", 22}
 	s := reflect.ValueOf(&t).Elem()
 	typeOfT := s.Type()
+	fmt.Println("typeof T", typeOfT)
+	fmt.Println("type is struct: ", typeOfT.Kind() == reflect.Struct)
 	for i := 0; i < s.NumField(); i++ {
 		f := s.Field(i)
 		fmt.Printf("%d: %s %s = %v\n", i, typeOfT.Field(i).Name, f.Type(), f.Interface())
