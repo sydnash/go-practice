@@ -118,6 +118,7 @@ func styleHandle(w http.ResponseWriter, r *http.Request) {
 	w.Write(css)
 }
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.RemoteAddr)
 	http.Redirect(w, r, "/view/FrontPage", http.StatusFound)
 }
 func main() {
