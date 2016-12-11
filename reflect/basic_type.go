@@ -45,4 +45,11 @@ func main() {
 	fmt.Println("settability of modifyXValue:", modifyXValue.CanSet())
 	modifyXValue.SetFloat(7.1)
 	fmt.Println("modifyx:", modifyX)
+
+	t := make([]interface{}, 0, 10)
+	t = append(t, 1)
+	t = append(t, "2")
+	tv := reflect.ValueOf(t)
+	elem := tv.Index(0)
+	fmt.Println(reflect.ValueOf(elem.Interface()).Type())
 }

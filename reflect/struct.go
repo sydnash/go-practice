@@ -14,6 +14,19 @@ type T struct {
 	C MyInt
 }
 
+type A interface {
+	Print(a string)
+}
+type B struct {
+}
+
+func (b *B) Print(a string) {
+	fmt.Println(a)
+}
+func (b *B) Call(a string) {
+	fmt.Println(a)
+}
+
 func main() {
 	t := T{23, "skidoo", 22}
 	s := reflect.ValueOf(&t).Elem()
@@ -52,4 +65,8 @@ func main() {
 	newi := newValue.Elem().Interface()
 	t2 := newi.(T)
 	fmt.Println(t2)
+	a := &B{}
+	var b A = a
+	fmt.Println(reflect.TypeOf(b))
+	fmt.Println(reflect.ValueOf(b).MethodByName("Call"))
 }
