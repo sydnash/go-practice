@@ -53,6 +53,18 @@ func main() {
 		fmt.Printf("%d: %s %s = %v\n", i, typeOfT1.Field(i).Name, f.Type(), f.Interface())
 	}
 
+	fmt.Println("=====================")
+	len := typeOfT.NumField()
+	sl := make([]reflect.StructField, len)
+	for i := 0; i < len; i++ {
+		sl[i] = typeOfT.Field(i)
+	}
+	newType := reflect.StructOf(sl)
+	_ = newType
+	newValue := reflect.New(typeOfT)
+	newi := newValue.Elem().Interface()
+	t2 := newi.(T)
+	fmt.Println(t2)
 	a := &B{}
 	var b A = a
 	fmt.Println(reflect.TypeOf(b))

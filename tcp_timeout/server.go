@@ -6,6 +6,7 @@ import (
 	_ "io"
 	"net"
 	"os"
+	"time"
 )
 
 var (
@@ -44,9 +45,11 @@ func handleRequest(con *net.TCPConn) {
 		con.Close()
 		fmt.Println("con close")
 	}()
-	buffer := make([]byte, 1000)
+	//buffer := make([]byte, 1000)
 	for {
+		time.Sleep(time.Minute)
 		//_, err := io.Copy(con, con)
+		/*con.SetDeadline(time.Now().Add(time.Second * 10))
 		_, err := con.Read(buffer)
 		if err != nil {
 			fmt.Println("copy error:", err)
@@ -57,5 +60,6 @@ func handleRequest(con *net.TCPConn) {
 			fmt.Println("copy error:", err)
 			break
 		}
+		*/
 	}
 }
