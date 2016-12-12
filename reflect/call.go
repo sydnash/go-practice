@@ -60,8 +60,4 @@ func main() {
 
 	m := make(map[int]int)
 	delete(m, 1)
-	delete(m, 1)
-	delete(m, 1)
-	delete(m, 1)
-	delete(m, 1)
 }
