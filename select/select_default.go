@@ -16,7 +16,6 @@ func main() {
 			}
 		}
 	}()
-
 	for {
 		fmt.Println(<-ch1)
 		time.Sleep(time.Second)

@@ -59,4 +59,10 @@ func main() {
 	var a interface{} = make(map[int]int)
 	t := M(a.(map[int]int))
 	fmt.Println(t)
+
+	var in []interface{} = []interface{}{1, 1.5, "abc", "123", map[int]int{1: 1, 2: 2, 3: 3}}
+	enc.Encode(in)
+	var out []interface{}
+	dec.Decode(&out)
+	fmt.Println(out)
 }

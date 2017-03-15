@@ -4,13 +4,25 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"regexp"
-	_ "strings"
+	"strconv"
+	"strings"
+	"time"
 )
 
 func main() {
-	resp, err := http.Get("https://passport.yhd.com/wechat/login.do")
+	mm := make(map[string][]string)
+	var que url.Values = url.Values(mm)
+	que.Add("appid", "wxb3789cd0954891d9")
+	que.Add("redirect_uri", "http://www.8844028.com")
+	que.Add("response_type", "code")
+	que.Add("scope", "snsapi_login")
+	que.Add("state", "value")
+	tmp1 := que.Encode()
+	ra := "https://open.weixin.qq.com/connect/qrconnect?" + tmp1
+	resp, err := http.Get(ra)
 	if err != nil {
 		fmt.Println("http get error.")
 		return
@@ -23,7 +35,7 @@ func main() {
 	}
 	src := string(body)
 	//<div class="wrp_code"><img class="qrcode lightBorder" src="/connect/qrcode/031dNCgfe-789o2w" /></div>
-	fmt.Println(src)
+	fmt.Println("ret:>>>>>>>>", src)
 
 	re1, _ := regexp.Compile(`\<div class="wrp_code"\>\<img class="qrcode lightBorder" src="([[:graph:]]*)" /\>\</div\>`)
 
@@ -41,6 +53,24 @@ func main() {
 		return
 	}
 	//fmt.Println(body1)
-
+	sp := strings.Split(tmp[0][1], "/")
+	uuid := sp[len(sp)-1]
 	ioutil.WriteFile("tmp.jpg", body1, os.ModePerm)
+	for {
+		n := strconv.FormatUint(uint64(time.Now().UnixNano()), 10)
+		append := "?uuid=" + uuid + "&_=" + n
+		address := "https://long.open.weixin.qq.com/connect/l/qrconnect" + append
+		fmt.Println("connect to===========:", address)
+		resp, err := http.Get(address)
+		if err != nil {
+			continue
+		}
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Println("http read error")
+			return
+		}
+		src := string(body)
+		fmt.Println(">>>>", src)
+	}
 }
