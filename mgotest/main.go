@@ -4,6 +4,8 @@ import (
 	"fmt"
 	mgo "gopkg.in/mgo.v2"
 	bson "gopkg.in/mgo.v2/bson"
+	"reflect"
+	"time"
 )
 
 type T1 struct {
@@ -47,9 +49,48 @@ func main() {
 	err = coll.Update(bson.M{"a": 1}, bson.M{"b": 4})
 
 	err = coll.Find(nil).Sort("-b").All(&rs)
+	fmt.Println("find nil:", rs)
+
+	rs = rs[0:0]
+	coll.Insert(bson.M{"a": 3, "b": 5, "c": bson.M{"out": 1, "tmp": 2}})
+	err = coll.Find(bson.M{"a": 3}).All(&rs)
 	fmt.Println(rs)
 
-	t := T{}
-	fmt.Println(t)
+	rs = rs[0:0]
+	coll.Update(bson.M{"a": 3}, bson.M{"$set": bson.M{"b": 7, "c.out": 2}})
+	err = coll.Find(bson.M{"a": 3}).All(&rs)
+	fmt.Println(rs)
 
+	fmt.Println(reflect.TypeOf(rs[0]["_id"]))
+
+	objId := bson.NewObjectId()
+	coll.Insert(bson.M{"_id": objId, "haha": "shiwo", "time": time.Now()})
+
+	rs = rs[0:0]
+	coll.FindId(objId).All(&rs)
+
+	fmt.Println(objId, rs)
+	fmt.Println(reflect.TypeOf(rs[0]["time"]))
+	t := time.Now()
+	fmt.Println(t.Before(t))
+
+	a := struct {
+		A int32     `json:"a"`
+		B time.Time `json:"b"`
+	}{10, time.Now()}
+
+	data, err := bson.MarshalJSON(a)
+	fmt.Printf("%v", string(data))
+	tm := bson.M{}
+	bson.UnmarshalJSON(data, &tm)
+	fmt.Println(reflect.ValueOf(tm["a"]).Kind())
+	fmt.Println(tm)
+	err = coll.Insert(tm)
+	if err != nil {
+		fmt.Println("=================", err)
+	}
+
+	rs = rs[0:0]
+	err = coll.Find(bson.M{"a": 10}).One(&a)
+	fmt.Println(a)
 }

@@ -1,17 +1,17 @@
 package main
 
 import (
-	_ "bufio"
+	"bufio"
 	"flag"
 	"fmt"
 	"net"
 	"os"
-	"time"
+	//"time"
 )
 
 var (
 	host = flag.String("host", "localhost", "host")
-	port = flag.String("port", "3333", "port")
+	port = flag.String("port", "9999", "port")
 )
 
 func main() {
@@ -32,16 +32,17 @@ func main() {
 	fmt.Println("Connecting to " + raddrstring)
 
 	done := make(chan string)
-	go handleWrite(con, done)
+	//go handleWrite(con, done)
 	go handleRead(con, done)
 	fmt.Println(<-done)
 }
 
 func handleWrite(con *net.TCPConn, done chan string) {
-	//buffer := make([]byte, 1000)
-	var a = 1
+	buffer := make([]byte, 1000)
+	//var a = 1
 OUTTER:
 	for {
+	/*
 		con.SetDeadline(time.Now().Add(time.Second * 10))
 		tmp := make([]byte, 1024)
 		_, e := con.Write(tmp)
@@ -57,8 +58,8 @@ OUTTER:
 		}
 		fmt.Println("write success:", a)
 		a++
+		*/
 
-		/*
 			inputReader := bufio.NewReader(os.Stdin)
 			t := buffer[0:0]
 			for {
@@ -68,6 +69,7 @@ OUTTER:
 					fmt.Println("input error:", err)
 					break OUTTER
 				}
+				fmt.Println("============: ", input, isPrefix)
 				if !isPrefix {
 					break
 				}
@@ -77,7 +79,6 @@ OUTTER:
 				fmt.Println("error to send msg:", err)
 				break
 			}
-		*/
 	}
 	done <- "done"
 }

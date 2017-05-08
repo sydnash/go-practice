@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"reflect"
 	"runtime"
 )
 
@@ -62,4 +63,7 @@ func main() {
 
 	ccc := map[int][]int{1: []int{1}}
 	fmt.Println(ccc)
+
+	tp := os.File{}
+	fmt.Println("pkgpath:", reflect.ValueOf(tp).Type().PkgPath())
 }
