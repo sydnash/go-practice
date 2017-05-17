@@ -108,6 +108,9 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	deviceId := r.FormValue(DEVICE_ID)
 	accountType := r.FormValue(ACCOUNT_TYPE)
 	crc := r.FormValue(CRC)
+	if len(deviceId) <= 2 {
+		w.Write([]byte(`{"status":1000001}`))
+	}
 	fmt.Println(action, ac, ltype, pw, qudaoType, deviceId, accountType, crc)
 
 	t1, _ := strconv.Atoi(accountType)
