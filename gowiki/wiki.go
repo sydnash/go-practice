@@ -118,6 +118,7 @@ func styleHandle(w http.ResponseWriter, r *http.Request) {
 	w.Write(css)
 }
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.RemoteAddr)
 	http.Redirect(w, r, "/view/FrontPage", http.StatusFound)
 }
 func main() {
@@ -127,5 +128,5 @@ func main() {
 	http.HandleFunc("/save/", saveHandler)
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/style/", styleHandle)
-	http.ListenAndServe("0.0.0.0:8080", nil)
+	http.ListenAndServe("0.0.0.0:80", nil)
 }
