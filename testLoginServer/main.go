@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"reflect"
@@ -97,6 +98,7 @@ func unpack(in []byte, rlen int, t interface{}) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("requset start: %v", r.RemoteAddr)
 	r.ParseForm()
 	action := r.FormValue(ACTION)
 	ac := r.FormValue(AC)
@@ -151,7 +153,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(string(b))
 
-	raddress, _ := net.ResolveTCPAddr("tcp", "192.168.23.7:55000")
+	raddress, _ := net.ResolveTCPAddr("tcp", "139.199.15.151:55000")
 	tcpCon, err := net.DialTCP("tcp", nil, raddress)
 	if err != nil {
 		fmt.Println("connect to game server faield:", err)
@@ -178,6 +180,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	a.Status = 1
 	sendClient, err := json.Marshal(a)
 	w.Write(sendClient)
+	log.Printf("requset end: %v", r.RemoteAddr)
 }
 
 type Service struct {
