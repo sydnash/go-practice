@@ -128,5 +128,5 @@ func main() {
 	http.HandleFunc("/save/", saveHandler)
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/style/", styleHandle)
-	http.ListenAndServe("0.0.0.0:8080", nil)
+	http.ListenAndServe("0.0.0.0:80", nil)
 }
