@@ -204,6 +204,6 @@ func main() {
 	*/
 
 	//start http
-	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/login/", loginHandler)
 	http.ListenAndServe(":8080", nil)
 }
