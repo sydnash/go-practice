@@ -157,7 +157,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(string(b))
 
-	raddress, _ := net.ResolveTCPAddr("tcp", "139.199.15.151:55000")
+	raddress, _ := net.ResolveTCPAddr("tcp", "192.168.23.7:55000")
 	tcpCon, err := net.DialTCP("tcp", nil, raddress)
 	if err != nil {
 		fmt.Println("connect to game server faield:", err)

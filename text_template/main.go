@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+	"time"
 )
 
 func main() {
@@ -17,6 +18,8 @@ func main() {
 			fmt.Println(e)
 		}
 	}()
+
+	fmt.Printf("%#x\n", time.Now().Unix())
 
 	fmt.Println("=============testComment================")
 	testComment()
