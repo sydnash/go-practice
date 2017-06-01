@@ -108,11 +108,11 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	deviceId := r.FormValue(DEVICE_ID)
 	accountType := r.FormValue(ACCOUNT_TYPE)
 	crc := r.FormValue(CRC)
+	fmt.Println("recv param:", action, ac, ltype, pw, qudaoType, deviceId, accountType, crc)
 	if len(deviceId) <= 2 {
 		w.Write([]byte(`{"status":1000001}`))
 		return
 	}
-	fmt.Println(action, ac, ltype, pw, qudaoType, deviceId, accountType, crc)
 
 	t1, _ := strconv.Atoi(accountType)
 	t2, _ := strconv.Atoi(qudaoType)
@@ -204,6 +204,6 @@ func main() {
 	*/
 
 	//start http
-	http.HandleFunc("/login/", loginHandler)
+	http.HandleFunc("/login", loginHandler)
 	http.ListenAndServe(":8080", nil)
 }
