@@ -75,9 +75,10 @@ func main() {
 	fmt.Println(t.Before(t))
 
 	a := struct {
-		A int32     `json:"a"`
-		B time.Time `json:"b"`
-	}{10, time.Now()}
+		A int32         `json:"a"`
+		B time.Time     `json:"b"`
+		C []interface{} `json:"c"`
+	}{10, time.Now(), []interface{}{1, 2, 3, 4}}
 
 	data, err := bson.MarshalJSON(a)
 	fmt.Printf("%v", string(data))
@@ -91,6 +92,7 @@ func main() {
 	}
 
 	rs = rs[0:0]
-	err = coll.Find(bson.M{"a": 10}).One(&a)
-	fmt.Println(a)
+	var last bson.M
+	err = coll.Find(bson.M{"a": 10}).One(&last)
+	fmt.Println(reflect.TypeOf(last["c"]))
 }
