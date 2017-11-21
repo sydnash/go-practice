@@ -44,6 +44,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/anouncement", loginHandler)
-	http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil)
+	fmt.Println("listen on server : %v", err)
 	L.Close()
 }

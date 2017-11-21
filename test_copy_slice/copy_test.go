@@ -23,6 +23,7 @@ func BenchmarkCopyByLoopAppend(b *testing.B) {
 }
 
 func TestCopyByAppend(t *testing.T) {
+	t.Log("aldskjfad")
 	CopyByAppend(a)
 }
 
@@ -32,7 +33,7 @@ var t2 string = t0[len(t0)/2:]
 
 func BenchmarkStringEqual(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_ = t3 == t4
+		///_ = t3 == t4
 	}
 }
 func BenchmarkStringComp(b *testing.B) {

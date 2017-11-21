@@ -95,4 +95,9 @@ func main() {
 	var last bson.M
 	err = coll.Find(bson.M{"a": 10}).One(&last)
 	fmt.Println(reflect.TypeOf(last["c"]))
+
+	coll.Insert(bson.M{"time": time.Now(), "ri": "123"})
+
+	coll.Find(bson.M{"time": bson.M{"$lte": time.Now()}}).All(&rs)
+	fmt.Println("ttt", rs)
 }

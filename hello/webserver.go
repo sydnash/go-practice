@@ -19,6 +19,7 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 	flag.Parse()
 	http.Handle("/", http.HandlerFunc(QR))
+	http.Handle("/test", http.HandlerFunc(Test))
 	fmt.Println(*addr)
 	err := http.ListenAndServe(*addr, nil)
 	if err != nil {
@@ -33,6 +34,18 @@ func sessionId() string {
 	return hex.EncodeToString(b)
 }
 func QR(w http.ResponseWriter, req *http.Request) {
+	cookie := &http.Cookie{Name: sessionId(), Value: "t"}
+	fmt.Println("random sessionid:", cookie.Name)
+	http.SetCookie(w, cookie)
+	templ.Execute(w, req.FormValue("s"))
+}
+
+func Test(w http.ResponseWriter, req *http.Request) {
+	req.ParseForm()
+	fmt.Println("========================================")
+	fmt.Println(req)
+	fmt.Println("========================================")
+	fmt.Println(req.Header)
 	cookie := &http.Cookie{Name: sessionId(), Value: "t"}
 	fmt.Println("random sessionid:", cookie.Name)
 	http.SetCookie(w, cookie)

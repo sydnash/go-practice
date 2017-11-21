@@ -6,5 +6,8 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, playground", time.Now().Format("2006-01-02"))
+	fmt.Println("Hello, playground")
+	t := time.Now().Unix()
+	out := time.Unix(t, 0)
+	fmt.Println(out)
 }

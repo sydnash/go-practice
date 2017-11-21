@@ -19,7 +19,7 @@ type LoginSend struct {
 	AcName      string `json:"acName"`
 	AcPWD       string `json:"acPwd"`
 	AccountType int    `json:"accountType"`
-	QudaoType   int    `json:"qudaoType"`
+	QudaoType   string `json:"qudaoType"`
 	MacAddress  string `json:"mac"`
 	LoginType   int    `json:"loginType"`
 	TitleURL    string `json:"titleUrl"`
@@ -115,7 +115,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	t1, _ := strconv.Atoi(accountType)
-	t2, _ := strconv.Atoi(qudaoType)
+	t2 := qudaoType //strconv.Atoi(qudaoType)
 	/*
 	   s := &Service{core.NewBase()}
 	   core.RegisterService(s)
@@ -157,7 +157,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(string(b))
 
-	raddress, _ := net.ResolveTCPAddr("tcp", "192.168.23.7:55000")
+	raddress, _ := net.ResolveTCPAddr("tcp", "182.140.131.10:55000")
 	tcpCon, err := net.DialTCP("tcp", nil, raddress)
 	if err != nil {
 		fmt.Println("connect to game server faield:", err)
