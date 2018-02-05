@@ -19,7 +19,7 @@ type LoginSend struct {
 	AcName      string `json:"acName"`
 	AcPWD       string `json:"acPwd"`
 	AccountType int    `json:"accountType"`
-	QudaoType   string `json:"qudaoType"`
+	QudaoType   int    `json:"qudaoType"`
 	MacAddress  string `json:"mac"`
 	LoginType   int    `json:"loginType"`
 	TitleURL    string `json:"titleUrl"`
@@ -147,7 +147,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	       return
 	   }
 	*/
-	loginSend := LoginSend{AcName: ac, AccountType: t1, QudaoType: t2, MacAddress: deviceId, LoginType: 2}
+	loginSend := LoginSend{AcName: ac, AccountType: t1, QudaoType: 1000, MacAddress: deviceId, LoginType: 2}
 
 	b, err := json.Marshal(loginSend)
 	if err != nil {

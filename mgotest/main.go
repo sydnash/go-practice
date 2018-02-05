@@ -100,4 +100,19 @@ func main() {
 
 	coll.Find(bson.M{"time": bson.M{"$lte": time.Now()}}).All(&rs)
 	fmt.Println("ttt", rs)
+
+	input := struct {
+		A int32
+		B time.Time
+		C string
+	}{101, time.Now(), "100"}
+	coll.Insert(input)
+
+	output := struct {
+		A string
+		B time.Time
+		C int
+	}{"101", time.Now(), 100}
+	err = coll.Find(bson.M{"a": 10}).One(&output)
+	fmt.Println("not mathch test.", err, output)
 }

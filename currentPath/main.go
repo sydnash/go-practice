@@ -9,7 +9,25 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"time"
 )
+
+const (
+	DAY_DURATION time.Duration = time.Duration(time.Hour * time.Duration(24))
+)
+
+func IsSameDay(now, pre time.Time, hour int) bool {
+	preHour := pre.Hour()
+	if preHour < hour {
+		pre = pre.Add(-DAY_DURATION)
+	}
+	newTime := time.Date(pre.Year(), pre.Month(), pre.Day(), hour, 0, 0, 0, time.Local)
+	diff := now.Sub(newTime)
+	if diff < DAY_DURATION {
+		return true
+	}
+	return false
+}
 
 func main() {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -61,9 +79,15 @@ func main() {
 	c := a[1:1]
 	fmt.Println(c)
 
-	ccc := map[int][]int{1: []int{1}}
+	ccc := map[int][]int{1: {1}}
 	fmt.Println(ccc)
 
 	tp := os.File{}
 	fmt.Println("pkgpath:", reflect.ValueOf(tp).Type().PkgPath())
+
+	now := time.Now()
+
+	preHour := time.Date(now.Year(), 2, 5, 7, 1, 0, 0, time.Local)
+
+	fmt.Println(IsSameDay(now, preHour, 8))
 }
