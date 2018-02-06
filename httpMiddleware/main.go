@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -8,12 +9,25 @@ import (
 	"strconv"
 )
 
+type Tmp struct {
+	Nick string
+}
+
 func main() {
-	http.ListenAndServe(":4000", &ModifierMiddleware{http.HandlerFunc(handler)})
+	//http.ListenAndServe(":4000", &ModifierMiddleware{http.HandlerFunc(handler)})
+	http.ListenAndServe(":4000", http.HandlerFunc(handler))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "counter")
+	//var t Tmp
+	//t.Nick = "\n&\\u0026f&<>&<>."
+	var t map[string]string
+	t = make(map[string]string)
+	t["Nic&k"] = "\n&\\u0026f&<>&<>\\u003c\\u003e."
+	d, _ := json.Marshal(t)
+	fmt.Println(string(d))
+	fmt.Println("\nalkdjf")
+	fmt.Fprintf(w, string(d))
 }
 
 type ModifierMiddleware struct {
