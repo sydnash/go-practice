@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -18,6 +19,17 @@ func main() {
 	http.ListenAndServe(":4000", http.HandlerFunc(handler))
 }
 
+func MarshalJson(v interface{}) ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	enc := json.NewEncoder(buf)
+	enc.SetEscapeHTML(false)
+	err := enc.Encode(v)
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), err
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
 	//var t Tmp
 	//t.Nick = "\n&\\u0026f&<>&<>."
@@ -26,7 +38,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	t["Nic&k"] = "\n&\\u0026f&<>&<>\\u003c\\u003e."
 	d, _ := json.Marshal(t)
 	fmt.Println(string(d))
-	fmt.Println("\nalkdjf")
+
+	dd, _ := MarshalJson(t)
+	fmt.Println("not escapehtml: ", string(dd))
 	fmt.Fprintf(w, string(d))
 }
 
