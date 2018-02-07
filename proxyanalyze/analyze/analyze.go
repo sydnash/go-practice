@@ -8,9 +8,12 @@ func GenerateProxyList(clubs map[int]*Club) map[int]*Proxy {
 			proxy = &Proxy{}
 			proxy.playerInfo = club.Creator
 			ret[club.Creator.acId] = proxy
+			proxy.players = make(map[int]*Player)
 		}
 
-		proxy.clubs = append(proxy.clubs, club)
+		for _, p := range club.Players {
+			proxy.players[p.acId] = p
+		}
 	}
 	return ret
 }
@@ -42,7 +45,7 @@ func compareClub(clubA, clubB *Club, threshold int) *ClubCompare {
 type ProxyCompare struct {
 	proxy1 *Proxy
 	proxy2 *Proxy
-	club   []*ClubCompare
+	same   []*Player
 }
 
 func compareProxy(proxyA, proxyB *Proxy, threshold int) *ProxyCompare {
@@ -50,15 +53,12 @@ func compareProxy(proxyA, proxyB *Proxy, threshold int) *ProxyCompare {
 		proxy1: proxyA,
 		proxy2: proxyB,
 	}
-	for _, clubA := range proxyA.clubs {
-		for _, clubB := range proxyB.clubs {
-			r := compareClub(clubA, clubB, threshold)
-			if r != nil {
-				ret.club = append(ret.club, r)
-			}
+	for _, player := range proxyA.players {
+		if _, ok := proxyB.players[player.acId]; ok {
+			ret.same = append(ret.same, player)
 		}
 	}
-	if len(ret.club) == 0 {
+	if len(ret.same) == 0 {
 		return nil
 	}
 	return ret

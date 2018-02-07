@@ -9,8 +9,8 @@ type CSVOut struct {
 	f *os.File
 }
 
-func (p *CSVOut) CreateFile() {
-	f, err := os.OpenFile("out.csv", os.O_WRONLY|os.O_CREATE, os.ModePerm)
+func (p *CSVOut) CreateFile(file string) {
+	f, err := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		panic(fmt.Sprintf("open file error. %v\n", err))
 	}
@@ -22,28 +22,41 @@ func (p *CSVOut) CreateFile() {
 }
 
 func (p *CSVOut) Write(issues []*Issue) {
+
+}
+
+func (p *CSVOut) Close() {
+	if p.f != nil {
+		p.f.Close()
+		p.f = nil
+	}
+}
+
+func WriteDetail(p *CSVOut, issues []*Issue) {
 	f := p.f
 	for _, issue := range issues {
-		f.WriteString(fmt.Sprintf("proxy,%v,%v\n", issue.proxy.playerInfo.acId, issue.proxy.playerInfo.nickname))
-
+		f.WriteString(fmt.Sprintf("proxy,%v,%v,cnt,%v\n", issue.proxy.playerInfo.acId, issue.proxy.playerInfo.nickname, len(issue.proxy.players)))
 		for _, cp := range issue.issues {
-			f.WriteString(fmt.Sprintf("withproxy,%v,%v\n", cp.proxy2.playerInfo.acId, cp.proxy2.playerInfo.nickname))
-			for _, club := range cp.club {
-				f.WriteString(fmt.Sprintf("sameplayerCnt,%v\n", len(club.same)))
-				f.WriteString(fmt.Sprintf("club,%v,memcnt,%v,\"   \",club,%v,memcnt,%v\n", club.club1.Id, len(club.club1.Players), club.club2.Id, len(club.club2.Players)))
-				f.WriteString(fmt.Sprintf("sameplayers\n"))
-				for _, p := range club.same {
-					f.WriteString(fmt.Sprintf("%v,%v\n", p.acId, p.nickname))
-				}
+			f.WriteString(fmt.Sprintf("withproxy,%v,%v,%v\n", cp.proxy2.playerInfo.acId, cp.proxy2.playerInfo.nickname, len(cp.proxy2.players)))
+			f.WriteString(fmt.Sprintf("sameplayerCnt,%v\n", len(cp.same)))
+			for _, p := range cp.same {
+				f.WriteString(fmt.Sprintf("%v,%v\n", p.acId, p.nickname))
 			}
 		}
 		f.WriteString("\n")
 	}
 }
 
-func (p *CSVOut) close() {
-	if p.f != nil {
-		p.f.Close()
-		p.f = nil
+func WriteSummary(p *CSVOut, issues []*Issue) {
+	f := p.f
+	for _, issue := range issues {
+		f.WriteString(fmt.Sprintf("proxy,%v,%v,cnt,%v\n", issue.proxy.playerInfo.acId, issue.proxy.playerInfo.nickname, len(issue.proxy.players)))
+		for _, cp := range issue.issues {
+			f.WriteString(fmt.Sprintf("withproxy,%v,%v,%v\n", cp.proxy2.playerInfo.acId, cp.proxy2.playerInfo.nickname, len(cp.proxy2.players)))
+			sameCnt := float32(len(cp.same))
+			f.WriteString(fmt.Sprintf("sameCnt,%v\n", sameCnt))
+			f.WriteString(fmt.Sprintf("percentme,%v,percentother,%v\n", sameCnt/float32(len(issue.proxy.players)), sameCnt/float32(len(cp.proxy2.players))))
+		}
+		f.WriteString("\n")
 	}
 }
