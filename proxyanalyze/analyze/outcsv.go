@@ -29,6 +29,7 @@ func (p *CSVOut) Write(issues []*Issue) {
 		for _, cp := range issue.issues {
 			f.WriteString(fmt.Sprintf("withproxy,%v,%v\n", cp.proxy2.playerInfo.acId, cp.proxy2.playerInfo.nickname))
 			for _, club := range cp.club {
+				f.WriteString(fmt.Sprintf("sameplayerCnt,%v\n", len(club.same)))
 				f.WriteString(fmt.Sprintf("club,%v,memcnt,%v,\"   \",club,%v,memcnt,%v\n", club.club1.Id, len(club.club1.Players), club.club2.Id, len(club.club2.Players)))
 				f.WriteString(fmt.Sprintf("sameplayers\n"))
 				for _, p := range club.same {
